@@ -1,15 +1,17 @@
 <div align="center">
 
-  <img src="./img/logo_app.png" alt="TEPO Logo" width="460" style="margin-bottom: 20px;" />
+  <img src="./img/logo_app.png" alt="TEPO Logo" width="460" style="margin-bottom: 24px;" />
+
+  # TEPO — Trento Energy Portfolio Optimizer
 
   **Decision Support System per la pianificazione e l'ottimizzazione degli interventi di efficientamento energetico sul patrimonio edilizio del Comune di Trento.**
 
-  *Sviluppato nell'ambito dell'insegnamento di Ingegneria del Software (A.A. 2026/2027) — Università degli Studi di Trento (DISI)*  
-  *Iniziativa istituzionale: « 100 progetti per il Comune di Trento »*
+  *Università degli Studi di Trento — Dipartimento di Ingegneria e Scienza dell'Informazione (DISI)*  
+  *Corso di Ingegneria del Software (A.A. 2026/2027) — Iniziativa istituzionale: «100 progetti per il Comune di Trento»*
 
   <br />
 
-  [![Live Demo on Render](https://img.shields.io/badge/Render-Live%20Demo-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://tepo.onrender.com)
+  [![Live Demo on Render](https://img.shields.io/badge/Render-Live%20Demo-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://tepobozza.onrender.com)
   [![Java 21](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
   [![Spring Boot 3](https://img.shields.io/badge/Spring_Boot-3.3.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
   [![Google OR-Tools](https://img.shields.io/badge/OR--Tools-CP--SAT_9.11-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/optimization)
@@ -20,147 +22,160 @@
 
   <br />
 
-  [🌐 **Prova la Demo Live**](https://tepo.onrender.com) • [💻 **Repository del Codice (TEPO)**](https://github.com/T-E-P-O/TEPO) • [📑 **Deliverable D1 (Requirements)**](https://github.com/T-E-P-O/D1) • [🧪 **Sandbox Bozza (tepobozza)**](https://github.com/T-E-P-O/tepobozza)
+  [**Demo Applicativa Online**](https://tepobozza.onrender.com) &nbsp;|&nbsp; [**Repository Principale (TEPO)**](https://github.com/T-E-P-O/TEPO) &nbsp;|&nbsp; [**Deliverable D1 (Requisiti)**](https://github.com/T-E-P-O/D1) &nbsp;|&nbsp; [**Deliverable D2 (Architettura)**](https://github.com/T-E-P-O/D2) &nbsp;|&nbsp; [**Sandbox (tepobozza)**](https://github.com/T-E-P-O/tepobozza)
 
 </div>
 
 ---
 
-## 🏛️ Visione e Principio Architetturale
+## Contesto Istituzionale e Obiettivi del Progetto
 
-La transizione ecologica e la riqualificazione energetica del patrimonio immobiliare pubblico pongono agli uffici tecnici comunali una sfida complessa: dato un insieme eterogeneo di edifici (scuole, uffici, impianti sportivi, sedi municipali), un catalogo di centinaia di opzioni di intervento (LED, infissi, isolamento termico a cappotto, pompe di calore, impianti fotovoltaici) e un budget di investimento limitato, **quale combinazione di interventi massimizza il beneficio per la collettività, nel rispetto rigoroso dei vincoli tecnici e di bilancio?**
+La gestione degli investimenti per la transizione ecologica del patrimonio immobiliare pubblico richiede strumenti formali di analisi e supporto alle decisioni. Nel contesto del Comune di Trento, il processo decisionale coinvolge un insieme eterogeneo di edifici municipali (istituti scolastici, complessi sportivi, sedi amministrative, immobili a valenza storica), un catalogo articolato di opzioni di riqualificazione tecnologica (relamping LED, sostituzione serramenti, coibentazione dell'involucro edilizio, pompe di calore, impianti fotovoltaici) e vincoli di bilancio stringenti.
 
-**TEPO** è la risposta metodologica e ingegneristica a questo problema combinatorio di Knapsack/MILP binario.
-
-> ### 💡 Il Principio Guida
-> **« L'AI propone. L'utente confronta. Il Comune decide. »**
-> 
-> *L'assistenza intelligente velocizza l'impostazione degli scenari ma non ha accesso in scrittura ai dati né ai modelli matematici. Il motore deterministico calcola il portafoglio ottimale certificato con garanzia di riproducibilità. La decisione finale resta sempre saldamente nelle mani dei funzionari e degli amministratori pubblici.*
+Il sistema **TEPO** (Trento Energy Portfolio Optimizer) formalizza tale problema combinatorio attraverso la Ricerca Operativa (modello Knapsack 0-1 / Programmazione Lineare Intera Binaria), consentendo di individuare la composizione ottima del portafoglio di interventi nel rispetto assoluto dei vincoli tecnici, economici e strutturali.
 
 ---
 
-## 📸 Galleria dell'Applicazione ("Strumento Civico")
+## Principio Architetturale: Confinamento Decisionale
 
-L'interfaccia utente è fondata sul design system editoriale **"Strumento Civico"**, dotato di doppio registro di lettura ad alta leggibilità: **Relazione** (ottimizzato per schermi luminosi, proiezioni e stampa formale) e **Sala operativa** (registro scuro ad alto contrasto per lunghe sessioni analitiche).
+Il sistema adotta un principio architetturale rigoroso fondato sulla separazione delle responsabilità e sul controllo umano obbligatorio (*Human-in-the-Loop*):
 
-| **Dashboard Operativa (Registro Relazione)** | **Dossier di Risultato & Audit Strip** |
+> ### Il Principio Fondamentale
+> **« L'algoritmo propone. L'utente confronta. L'amministrazione decide. »**
+>
+> I moduli di assistenza e precompilazione operano esclusivamente in lettura e suggerimento, privi di permessi di scrittura sul modello matematico o sui registri comunali. La risoluzione del portafoglio è affidata al motore deterministico Google OR-Tools, con garanzia di convergenza all'ottimo e riproducibilità certificata tramite hash canonico. La decisione finale resta in capo ai funzionari e agli organi decisionali dell'ente.
+
+---
+
+## Interfaccia Operativa ("Strumento Civico")
+
+L'interfaccia utente adotta il design system editoriale **Strumento Civico**, strutturato su due registri di fruizione a elevata leggibilità e conformi agli standard di accessibilità istituzionale:
+- **Registro Relazione**: palette chiara e impaginazione documentale, ottimizzata per revisioni d'ufficio, videoproiezioni e stampa formale di relazioni tecniche.
+- **Registro Sala Operativa**: palette scura ad alto contrasto, concepita per sessioni prolungate di analisi dati, calcolo combinatorio e monitoraggio cartografico.
+
+| Dashboard Operativa (Registro Relazione) | Dossier di Risultato con Audit Strip |
 |:---:|:---:|
 | <img src="./img/dashboard-relazione.png" alt="Dashboard Relazione" width="480" /> | <img src="./img/risultato.png" alt="Dossier Risultato" width="480" /> |
-| *Fascia di stato permanente, indicatori KPI e percorso decisionale.* | *Hash canonico, motivazioni deterministiche e allocazione per edificio.* |
+| *Indicatori sintetici, stato del catalogo e percorso decisionale.* | *Hash canonico dello scenario, motivazioni formali e allocazione.* |
 
-| **Confronto Scenari What-If (A vs B)** | **Mappa Geografica degli Edifici** |
+| Analisi Differenziale What-If (Scenario A vs B) | Cartografia Territoriale degli Edifici |
 |:---:|:---:|
 | <img src="./img/confronto.png" alt="Confronto A/B" width="480" /> | <img src="./img/mappa.png" alt="Mappa Edifici Trento" width="480" /> |
-| *Scostamenti differenziali diretti (B − A) e matrici di confronto.* | *Cartografia interattiva Leaflet con marcatura proporzionale all'investimento.* |
+| *Scostamenti puntuali (B − A) e confronto matriciale degli interventi.* | *Planimetria interattiva con marcatori proporzionali all'investimento.* |
 
 <div align="center">
-  <img src="./img/sensibilita.png" alt="Analisi di Sensibilità sul Budget" width="750" />
-  <p><em>Analisi di sensibilità deterministica: sweep sul budget da 3 a 51 punti per identificare interventi stabili e oscillanti.</em></p>
+  <img src="./img/sensibilita.png" alt="Analisi di Sensibilità Parametrica sul Budget" width="750" />
+  <p><em>Analisi di sensibilità parametrica: campionamento del budget da 3 a 51 iterazioni per l'identificazione di interventi stabili, oscillanti ed esclusi.</em></p>
 </div>
 
 ---
 
-## 🗂️ Mappa delle Repository dell'Organizzazione
+## Organizzazione delle Repository
 
-L'organizzazione GitHub **[T-E-P-O](https://github.com/T-E-P-O)** è strutturata secondo una rigida divisione delle responsabilità tra codice applicativo e deliverable accademici:
+L'organizzazione GitHub **[T-E-P-O](https://github.com/T-E-P-O)** adotta una rigida suddivisione tra codebase del sistema software e deliverable accademici formalizzati:
 
-| Repository | Descrizione | Stato |
+| Repository | Descrizione e Contenuto | Stato |
 |:---|:---|:---:|
-| **[TEPO/TEPO](https://github.com/T-E-P-O/TEPO)** | **Repository Principale del Software.** Contiene l'intero codice sorgente (Spring Boot 3, OR-Tools, React/TS), suite di test automatizzati (119 test backend, 69 frontend), blueprint Docker e configurazione Render IaC. | 🟢 Attivo |
-| **[TEPO/D1](https://github.com/T-E-P-O/D1)** | **Deliverable D1 — Requirements Engineering.** Documento formale in LaTeX (64 pagine) sincronizzato con Overleaf, contenente la specifica formale dei requisiti (RF/RNF), Use Cases, User Stories INVEST, Wireframe Canva e Matrice di Tracciabilità completa. | 🟢 Rilasciato |
-| **[TEPO/tepobozza](https://github.com/T-E-P-O/tepobozza)** | **Repository Sandbox e Integrazione.** Versione con tutti i 10 feature branch didattici già mergiati e sincronizzati sul branch `main`. | 🟢 Sincronizzato |
-| **[TEPO/D2](https://github.com/T-E-P-O/D2)** | **Deliverable D2 — Architectural Design & Testing.** Specifica architetturale, protocollo di collaudo e verifica sul campo. | 🟡 In sviluppo |
-| **[TEPO/D3](https://github.com/T-E-P-O/D3)** | **Deliverable D3 — Quality Assurance & Test Report.** Analisi statica, metriche di copertura e benchmark prestazionali. | ⚪ Pianificato |
-| **[TEPO/D4](https://github.com/T-E-P-O/D4)** | **Deliverable D4 — Final Handover & User Manuals.** Manuale operativo per l'ufficio tecnico del Comune e documentazione di chiusura. | ⚪ Pianificato |
+| **[TEPO/TEPO](https://github.com/T-E-P-O/TEPO)** | Repository di produzione del software. Include il backend Java 21 / Spring Boot 3 con Google OR-Tools CP-SAT, il frontend React 18 / TypeScript / Vite, le suite di test automatizzati (119 test backend, 69 frontend) e la configurazione Docker e Render. | Attivo |
+| **[TEPO/D1](https://github.com/T-E-P-O/D1)** | Deliverable D1 — Requirements Engineering. Documento accademico LaTeX (64 pagine) sincronizzato con Overleaf, recante specifiche formali dei requisiti funzionali e non funzionali, Use Case, User Stories INVEST, Wireframe e Matrice di Tracciabilità. | Rilasciato |
+| **[TEPO/D2](https://github.com/T-E-P-O/D2)** | Deliverable D2 — Architectural Design & Testing. Specifica dell'architettura di sistema, protocollo formale di collaudo e test plan. | In corso |
+| **[TEPO/tepobozza](https://github.com/T-E-P-O/tepobozza)** | Repository di integrazione e testing continuo. Ambiente integrato con i 10 rami funzionali didattici consolidati sul ramo principale `main`. | Sincronizzato |
+| **[TEPO/D3](https://github.com/T-E-P-O/D3)** | Deliverable D3 — Quality Assurance & Test Verification. Report di collaudo, metriche di copertura del codice e analisi statica. | Pianificato |
+| **[TEPO/D4](https://github.com/T-E-P-O/D4)** | Deliverable D4 — Final Handover & User Manuals. Manuale d'uso per il personale tecnico del Comune di Trento e relazione conclusiva. | Pianificato |
 
 ---
 
-## ⚙️ Caratteristiche Funzionali Distintive
+## Moduli Funzionali del Sistema
 
-### 1. 🧮 Motore di Ottimizzazione OR-Tools CP-SAT
-- Risoluzione esatta del problema combinatorio con formulazione MILP binaria.
-- Supporto a vincoli di bilancio, incompatibilità mutua simmetrica ($x_A + x_B \le 1$), prerequisiti logici ($x_A \implies x_{\text{req}}$), quote massime di selezione e inclusioni/esclusioni forzate.
-- **Tie-break canonico a 4 passi:** (1) Massimizzazione obiettivo primario $\implies$ (2) Minimizzazione investimento totale $\implies$ (3) Minimizzazione numero di cantieri $\implies$ (4) Ordinamento lessicografico stabile per ID.
-- Hash crittografico canonico dello scenario per garantire auditabilità assoluta e riproducibilità matematica.
+### 1. Motore di Ottimizzazione OR-Tools CP-SAT
+- Risoluzione esatta del problema combinatorio mediante Programmazione Lineare Intera Binaria (MILP 0-1).
+- Gestione integrata di vincoli di budget, mutua esclusione tra interventi ($x_A + x_B \le 1$), prerequisiti tecnologici ($x_A \implies x_{\text{req}}$), tetti massimi di spesa per tipologia edilizia e forzature esplicite (inclusioni/esclusioni vincolate).
+- **Procedura di Tie-Break a 4 livelli:**
+  1. Massimizzazione dell'obiettivo primario prescelto (risparmio energetico, risparmio economico, abbattimento emissioni CO$_2$);
+  2. Minimizzazione del costo complessivo di investimento;
+  3. Minimizzazione del numero complessivo di cantieri attivati;
+  4. Ordinamento lessicografico deterministico per identificativo univoco.
+- Generazione di hash SHA-256 canonico dello scenario per tracciabilità, auditabilità e riproducibilità matematica dei risultati.
 
-### 2. 🔍 Modulo Spiegazioni Deterministiche ("Reason Codes")
-Ogni singolo intervento candidato riceve una spiegazione verificabile e locale:
-- *Selezionato per contributo all'obiettivo*;
-- *Selezionato in quanto prerequisito*;
-- *Escluso per incompatibilità con intervento scelto*;
-- *Escluso per prerequisito mancante*;
-- *Escluso per superamento budget residuo o complessivo*;
-- *Escluso in quanto non ottimale (causa locale non deducibile)*.
+### 2. Motore delle Spiegazioni Deterministiche (Reason Codes)
+Attribuzione deterministica e locale a ogni intervento candidato del rispettivo codice di motivazione:
+- *Selezionato per contributo all'obiettivo primario*;
+- *Selezionato in quanto prerequisito tecnologico necessario*;
+- *Escluso per incompatibilità con altro intervento selezionato*;
+- *Escluso per mancata soddisfazione del prerequisito*;
+- *Escluso per superamento del budget residuo o complessivo*;
+- *Escluso in quanto non compreso nella combinazione ottima globale*.
 
-### 3. ⚖️ Confronto Scenari What-If (Slot A/B)
-- Salvataggio rapido in sessione di due configurazioni alternative.
-- Analisi automatica degli scostamenti $\Delta = B - A$ su kWh risparmiati, spesa annua ridotta, tonnellate di CO$_2$ e cantieri avviati.
-- Tabella differenziale degli interventi aggiunti e rimossi tra gli scenari.
+### 3. Modulo di Confronto Scenari What-If
+- Memorizzazione volatile di due configurazioni alternative (Scenario A e Scenario B).
+- Calcolo automatico degli scostamenti differenziali diretti $\Delta = B - A$ su parametri fisici (kWh annui), economici (EUR/anno), ambientali (kg CO$_2$/anno) e gestionali (numero cantieri).
+- Visualizzazione tabellare degli interventi aggiunti, rimossi e confermati tra le due ipotesi.
 
-### 4. 📈 Sweep Deterministico di Sensibilità
-- Variazione sistematica del budget base su griglie da 3 a 51 campioni.
-- Classificazione dei candidati in:
-  - **Sempre selezionati** (*core investments* stabili e prioritari);
-  - **Mai selezionati** (*non convenienti* nel range esplorato);
-  - **Oscillanti** (*swing options*, dipendenti dalla specifica disponibilità di bilancio).
+### 4. Analisi di Sensibilità Parametrica
+- Variazione sistematica del budget disponibile su griglie configurabili da 3 a 51 punti di campionamento.
+- Classificazione analitica degli interventi:
+  - **Interventi Stabili (Core):** selezionati con costanza all'interno dell'intervallo analizzato;
+  - **Interventi Oscillanti (Swing):** la cui ammissibilità dipende fortemente da variazioni marginali del budget;
+  - **Interventi Non Convenienti:** mai selezionati all'interno della finestra di spesa esaminata.
 
-### 5. 🤖 Assistente AI Confinato (Human-in-the-Loop)
-- Interpreta richieste in linguaggio naturale (es. *"Voglio massimizzare la riduzione di CO2 con 750.000 euro concentrandomi sulle scuole"*).
-- Propone una configurazione di scenario precompilata.
-- Fallback locale a regole in assenza di credenziali esterne (nessuna API key obbligatoria).
-- **Controllo Umano Obbligatorio:** nessuna proposta viene applicata automaticamente senza approvazione esplicita dell'operatore.
+### 5. Assistenza in Linguaggio Naturale Confinata (Human-in-the-Loop)
+- Interpretazione delle preferenze operative formulate dall'utente in linguaggio naturale.
+- Predisposizione di una bozza di scenario precompilata con applicazione strettamente subordinata alla conferma esplicita dell'operatore.
+- Meccanismo di fallback deterministico basato su regole analitiche locali in caso di indisponibilità dei servizi esterni.
 
 ---
 
-## 🛠️ Stack Tecnologico e Giustificazione Didattica
+## Architettura Software e Stack Tecnologico
 
-L'architettura software è stata progettata privilegiando affidabilità e rigore matematico:
+L'architettura adotta criteri di isolamento dei componenti, tipizzazione statica e garanzia di integrità dei dati:
 
-| Componente | Scelta Tecnologica | Motivazione Tecnica di Trade-off |
+| Sottosistema | Tecnologia Adottata | Motivazione Tecnica e Trade-off |
 |:---|:---|:---|
-| **Ottimizzazione & Backend** | **Java 21 + Spring Boot 3 + Google OR-Tools CP-SAT** | OR-Tools offre binding industriali nativi e stabili per CP-SAT con vincoli logici avanzati (`OnlyEnforceIf`). Node.js non dispone di solutori MILP binari equivalenti maturi per l'ottimizzazione combinatoria esatta. |
-| **Database & Integrità** | **PostgreSQL 16 + Flyway Migrations** | Dominio fortemente relazionale caratterizzato da vincoli di chiave esterna e integrità referenziale (edifici $\leftrightarrow$ interventi $\leftrightarrow$ incompatibilità). Un database NoSQL come MongoDB esporrebbe a disallineamenti e stati orfani. |
-| **Frontend & UI** | **React 18 + TypeScript + Vite + Leaflet** | Strutture dati complesse (matrici di scostamento, coordinate territoriali, vettori di sensibilità). TypeScript garantisce tipizzazione statica a tempo di compilazione ed elimina errori di runtime. |
-| **Infrastruttura & Deploy** | **Docker Compose + Cloud Render (onrender.com)** | Containerizzazione completa per sviluppo locale multi-piattaforma (x86_64 e ARM64) e deployment immediato su Render con monitoraggio e porte dinamiche. |
+| **Backend & Solutore** | Java 21, Spring Boot 3.3, Google OR-Tools CP-SAT | Binding industriali stabili per la risoluzione esatta con vincoli logici condizionati (`OnlyEnforceIf`). Garanzia di elevate prestazioni e assenza di approssimazioni euristiche. |
+| **Persistenza & Dati** | PostgreSQL 16, Flyway Migrations, JPA/Hibernate | Modello relazionale con vincoli stringenti di integrità referenziale tra edifici, interventi e incompatibilità. Storico migrazioni versionato a codice. |
+| **Frontend & Presentazione** | React 18, TypeScript 5.5, Vite, Leaflet | Tipizzazione a tempo di compilazione su strutture dati complesse (matrici di sensibilità, dati territoriali, scostamenti $\Delta$). Routing SPA con reindirizzamento deterministico. |
+| **Infrastruttura & Esecuzione** | Docker, Temurin JRE Jammy, Render Cloud | Multi-stage build per la compilazione separata dei sorgenti e produzione di un container unico unificato a ingombro ridotto, compatibile con architetture x86_64 e ARM64. |
 
 ---
 
-## 🚀 Quickstart: Avvio in Locale
+## Avvio in Ambiente Locale
 
-### Avvio Rapido con Docker Compose (Raccomandato)
+### Esecuzione tramite Docker Compose (Metodo Consigliato)
 
-Requisiti: **Docker Desktop** installato e avviato.
+Requisiti: **Docker Desktop** (o Docker Engine con plugin Compose) installato e attivo.
 
 ```bash
-# 1. Clona la repository principale
+# 1. Clonazione della repository principale
 git clone https://github.com/T-E-P-O/TEPO.git
 cd TEPO
 
-# 2. Avvia l'intero stack (DB PostgreSQL + Backend Spring Boot + Frontend React)
+# 2. Compilazione e avvio dell'infrastruttura completa
 docker compose up --build
 ```
 
-Una volta terminato il build:
-- 🌐 **Frontend Web:** [http://localhost:5173](http://localhost:5173)
-- 🔌 **API REST Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- 🐘 **Database PostgreSQL:** `localhost:5432` (db: `tepo`, user: `tepo`, pass: `tepo`)
+Al completamento della procedura di avvio:
+- Applicazione Web: [http://localhost:5173](http://localhost:5173)
+- Documentazione API REST (OpenAPI / Swagger UI): [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- Endpoint di stato: [http://localhost:8080/api/scenarios/ping](http://localhost:8080/api/scenarios/ping)
+- Database PostgreSQL: `localhost:5432` (database: `tepo`, utente: `tepo`, password: `tepo`)
 
-### Esecuzione della Suite di Test
+### Esecuzione della Suite di Verifica
 
-```powershell
-# Esecuzione 119 test backend (tramite container Docker isolato)
-.\scripts\test-backend.ps1
+```bash
+# Esecuzione della suite di test backend (119 unit e integration test)
+cd backend
+mvn clean test
 
-# Esecuzione 69 test frontend (Vitest)
-cd frontend
+# Esecuzione della suite di test frontend (69 unit test Vitest)
+cd ../frontend
 npm test
 ```
 
 ---
 
-## 👥 Team di Sviluppo — Gruppo T14
+## Gruppo di Lavoro — Gruppo Didattico T14
 
-Progetto sviluppato congiuntamente da:
+Progetto sviluppato collegialmente da:
 
 - **Mirco Negri** — [@mirconegri](https://github.com/mirconegri)
 - **Gabriele Duca** — [@ghebbb](https://github.com/ghebbb)
@@ -170,5 +185,5 @@ Progetto sviluppato congiuntamente da:
 
 <div align="center">
   <sub>Università degli Studi di Trento — Dipartimento di Ingegneria e Scienza dell'Informazione (DISI)</sub><br />
-  <sub>Corso di Ingegneria del Software (A.A. 2026/2027) — Progetto TEPO</sub>
+  <sub>Corso di Ingegneria del Software (A.A. 2026/2027) — Iniziativa «100 progetti per il Comune di Trento»</sub>
 </div>
