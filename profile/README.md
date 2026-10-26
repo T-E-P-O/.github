@@ -1,467 +1,176 @@
-# TEPO — Trento Energy Portfolio Optimizer
+<div align="center">
 
-[![CI](https://github.com/mirconegri/tepobozza/actions/workflows/ci.yml/badge.svg)](https://github.com/mirconegri/tepobozza/actions/workflows/ci.yml)
+  <img src="./img/logo_app.png" alt="TEPO Logo" width="160" style="margin-bottom: 12px;" />
 
-Decision Support System per la selezione di portafogli di interventi di efficientamento energetico sugli edifici comunali.
+  # Trento Energy Portfolio Optimizer (TEPO)
 
-**Principio architetturale:** L'AI propone. L'utente confronta. Il Comune decide.
+  **Decision Support System per la pianificazione e l'ottimizzazione degli interventi di efficientamento energetico sul patrimonio edilizio del Comune di Trento.**
 
-**Dataset:** DEMO — dati sintetici. Nessun dato reale del Comune di Trento è incluso.
+  *Sviluppato nell'ambito dell'insegnamento di Ingegneria del Software (A.A. 2026/2027) — Università degli Studi di Trento (DISI)*  
+  *Iniziativa istituzionale: « 100 progetti per il Comune di Trento »*
 
----
+  <br />
 
-## Cos'è TEPO
+  [![Live Demo on Render](https://img.shields.io/badge/Render-Live%20Demo-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://tepo.onrender.com)
+  [![Java 21](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
+  [![Spring Boot 3](https://img.shields.io/badge/Spring_Boot-3.3.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+  [![Google OR-Tools](https://img.shields.io/badge/OR--Tools-CP--SAT_9.11-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/optimization)
+  [![PostgreSQL 16](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+  [![React 18](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-TEPO aiuta il Comune di Trento a rispondere a una domanda specifica:
+  <br />
 
-> Dato un insieme di interventi energetici già individuati dai servizi tecnici,
-> un budget limitato e una serie di vincoli, quale combinazione di interventi
-> massimizza l'obiettivo scelto?
+  [🌐 **Prova la Demo Live**](https://tepo.onrender.com) • [💻 **Repository del Codice (TEPO)**](https://github.com/T-E-P-O/TEPO) • [📑 **Deliverable D1 (Requirements)**](https://github.com/T-E-P-O/D1) • [🧪 **Sandbox Bozza (tepobozza)**](https://github.com/T-E-P-O/tepobozza)
 
-TEPO **non** progetta interventi, **non** stima costi o benefici, **non** prende decisioni amministrative. Organizza candidati, valida scenari, applica vincoli, ottimizza, confronta e spiega. La decisione finale resta umana.
-
-Progetto accademico — Università degli Studi di Trento, corso di Ingegneria del Software, A.A. 2026/2027, nell'ambito dell'iniziativa "100 progetti per il Comune di Trento".
-
-**Team:** Mirco Negri, Gabriele Duca, Riccardo Scheda.
-
----
-
-## Cosa fa
-
-- Gestisce edifici, tipologie e opzioni di intervento con provenienza dati esplicita.
-- Crea scenari con budget, obiettivo (energia / economia / CO2) e vincoli.
-- Ottimizza il portafoglio con **OR-Tools CP-SAT** (Knapsack / MILP binario), multi-pass con tie-break lessicografico canonico.
-- Spiega selezioni ed esclusioni con reason code deterministici.
-- Confronta scenari (What-If).
-- Visualizza gli edifici sulla mappa di Trento.
-- Importa edifici da CSV con preview e validazione.
-- Espone API REST documentate con Swagger UI.
-- Offre un assistente AI **opzionale** che propone parametri di scenario da linguaggio naturale. L'AI non calcola risultati e non applica nulla senza approvazione umana.
-- Esegue analisi di sensibilità deterministica sul budget (sweep su griglia configurabile, non Monte Carlo).
-
-**Fuori dall'MVP:** IoT, digital twin, previsione dei consumi, monitoraggio post-intervento, pianificazione multi-anno, Pareto frontier, integrazione con sistemi comunali. Elencati come Future Work in `docs/requirements.md`.
+</div>
 
 ---
 
-## Stack
+## 🏛️ Visione e Principio Architetturale
 
-| Livello | Tecnologia |
-|---|---|
-| Backend | Java 21, Spring Boot 3.3.4, Spring Data JPA, Bean Validation |
-| Database | PostgreSQL 16, Flyway per migrazioni |
-| Ottimizzazione | Google OR-Tools CP-SAT 9.11 |
-| Import CSV | Apache Commons CSV 1.11 |
-| Documentazione API | springdoc-openapi 2.6 (Swagger UI) |
-| Frontend | React 18, TypeScript, Vite, React Router, Leaflet + React Leaflet |
-| Test backend | JUnit 5, Mockito, H2 in-memory |
-| Test frontend | Vitest, Testing Library |
-| Infrastruttura | Docker Compose |
-| AI (opzionale) | Client HTTP compatibile OpenAI, prompt strutturato, fallback deterministico |
+La transizione ecologica e la riqualificazione energetica del patrimonio immobiliare pubblico pongono agli uffici tecnici comunali una sfida complessa: dato un insieme eterogeneo di edifici (scuole, uffici, impianti sportivi, sedi municipali), un catalogo di centinaia di opzioni di intervento (LED, infissi, isolamento termico a cappotto, pompe di calore, impianti fotovoltaici) e un budget di investimento limitato, **quale combinazione di interventi massimizza il beneficio per la collettività, nel rispetto rigoroso dei vincoli tecnici e di bilancio?**
+
+**TEPO** è la risposta metodologica e ingegneristica a questo problema combinatorio di Knapsack/MILP binario.
+
+> ### 💡 Il Principio Guida
+> **« L'AI propone. L'utente confronta. Il Comune decide. »**
+> 
+> *L'assistenza intelligente velocizza l'impostazione degli scenari ma non ha accesso in scrittura ai dati né ai modelli matematici. Il motore deterministico calcola il portafoglio ottimale certificato con garanzia di riproducibilità. La decisione finale resta sempre saldamente nelle mani dei funzionari e degli amministratori pubblici.*
 
 ---
 
-## Struttura repository
+## 📸 Galleria dell'Applicazione ("Strumento Civico")
 
-```
-tepobozza/
-├── backend/
-│   ├── src/main/java/it/unitn/tepo/
-│   │   ├── ai/                 Assistente AI (interfaccia + rule-based + LLM)
-│   │   │   └── llm/            Provider LLM, prompt, parsing
-│   │   ├── api/                Controller REST
-│   │   ├── application/        Servizi applicativi e repository
-│   │   ├── configuration/      Demo data loader, OpenAPI config
-│   │   ├── domain/             Entità e enum
-│   │   └── optimization/       Solver, dominio del problema, spiegazioni, hasher canonico
-│   ├── src/main/resources/
-│   │   ├── application.yaml
-│   │   └── db/migration/       Migrazioni Flyway (V1, V2)
-│   └── src/test/java/          Test automatici (119 verdi)
-├── frontend/
-│   ├── src/pages/              9 pagine: Dashboard, Mappa, Edifici,
-│   │                           Interventi, Scenario, Risultato,
-│   │                           Confronto, Sensibilità, Import
-│   ├── src/components/         shell (fascia, indice, comandi), ui, charts,
-│   │                           AiAssistantPanel
-│   ├── src/services/           API client tipizzato, scenario store
-│   ├── src/hooks/              dati asincroni, sessione, registro, sorting
-│   ├── src/lib/                formattazione, etichette, derivazioni, nav
-│   ├── src/styles/             Token, base, componenti, grafici, stili pagina
-│   ├── src/test/               Test Vitest (14 file, 69 verdi)
-│   └── Dockerfile
-├── scripts/
-│   ├── test-backend.ps1        Test backend via Docker (Windows)
-│   └── test-backend.sh         Test backend via Docker (Linux/macOS)
-├── docs/                       Documentazione tecnica
-│   ├── requirements.md
-│   ├── architecture.md
-│   ├── domain-model.md
-│   ├── optimization.md
-│   ├── api.md
-│   ├── ai-integration.md
-│   ├── testing.md
-│   ├── traceability.md
-│   ├── demo.md
-│   ├── collaudo.md
-│   ├── data-readiness.md
-│   ├── audit-report.md
-│   ├── checkpoint.md
-│   ├── design-system.md
-│   ├── screenshot/
-│   └── uml/
-├── docker-compose.yaml
-├── .env.example
-├── .gitignore
-├── ISTRUZIONI-AVVIO.md
-└── README.md
-```
+L'interfaccia utente è fondata sul design system editoriale **"Strumento Civico"**, dotato di doppio registro di lettura ad alta leggibilità: **Relazione** (ottimizzato per schermi luminosi, proiezioni e stampa formale) e **Sala operativa** (registro scuro ad alto contrasto per lunghe sessioni analitiche).
+
+| **Dashboard Operativa (Registro Relazione)** | **Dossier di Risultato & Audit Strip** |
+|:---:|:---:|
+| <img src="./img/dashboard-relazione.png" alt="Dashboard Relazione" width="480" /> | <img src="./img/risultato.png" alt="Dossier Risultato" width="480" /> |
+| *Fascia di stato permanente, indicatori KPI e percorso decisionale.* | *Hash canonico, motivazioni deterministiche e allocazione per edificio.* |
+
+| **Confronto Scenari What-If (A vs B)** | **Mappa Geografica degli Edifici** |
+|:---:|:---:|
+| <img src="./img/confronto.png" alt="Confronto A/B" width="480" /> | <img src="./img/mappa.png" alt="Mappa Edifici Trento" width="480" /> |
+| *Scostamenti differenziali diretti (B − A) e matrici di confronto.* | *Cartografia interattiva Leaflet con marcatura proporzionale all'investimento.* |
+
+<div align="center">
+  <img src="./img/sensibilita.png" alt="Analisi di Sensibilità sul Budget" width="750" />
+  <p><em>Analisi di sensibilità deterministica: sweep sul budget da 3 a 51 punti per identificare interventi stabili e oscillanti.</em></p>
+</div>
 
 ---
 
-## Avvio
+## 🗂️ Mappa delle Repository dell'Organizzazione
 
-### Percorso primario: Docker Compose (funziona su qualsiasi OS)
+L'organizzazione GitHub **[T-E-P-O](https://github.com/T-E-P-O)** è strutturata secondo una rigida divisione delle responsabilità tra codice applicativo e deliverable accademici:
 
-**Requisiti**: solo Docker Desktop installato e avviato.
+| Repository | Descrizione | Stato |
+|:---|:---|:---:|
+| **[TEPO/TEPO](https://github.com/T-E-P-O/TEPO)** | **Repository Principale del Software.** Contiene l'intero codice sorgente (Spring Boot 3, OR-Tools, React/TS), suite di test automatizzati (119 test backend, 69 frontend), blueprint Docker e configurazione Render IaC. | 🟢 Attivo |
+| **[TEPO/D1](https://github.com/T-E-P-O/D1)** | **Deliverable D1 — Requirements Engineering.** Documento formale in LaTeX (64 pagine) sincronizzato con Overleaf, contenente la specifica formale dei requisiti (RF/RNF), Use Cases, User Stories INVEST, Wireframe Canva e Matrice di Tracciabilità completa. | 🟢 Rilasciato |
+| **[TEPO/tepobozza](https://github.com/T-E-P-O/tepobozza)** | **Repository Sandbox e Integrazione.** Versione con tutti i 10 feature branch didattici già mergiati e sincronizzati sul branch `main`. | 🟢 Sincronizzato |
+| **[TEPO/D2](https://github.com/T-E-P-O/D2)** | **Deliverable D2 — Architectural Design & Testing.** Specifica architetturale, protocollo di collaudo e verifica sul campo. | 🟡 In sviluppo |
+| **[TEPO/D3](https://github.com/T-E-P-O/D3)** | **Deliverable D3 — Quality Assurance & Test Report.** Analisi statica, metriche di copertura e benchmark prestazionali. | ⚪ Pianificato |
+| **[TEPO/D4](https://github.com/T-E-P-O/D4)** | **Deliverable D4 — Final Handover & User Manuals.** Manuale operativo per l'ufficio tecnico del Comune e documentazione di chiusura. | ⚪ Pianificato |
+
+---
+
+## ⚙️ Caratteristiche Funzionali Distintive
+
+### 1. 🧮 Motore di Ottimizzazione OR-Tools CP-SAT
+- Risoluzione esatta del problema combinatorio con formulazione MILP binaria.
+- Supporto a vincoli di bilancio, incompatibilità mutua simmetrica ($x_A + x_B \le 1$), prerequisiti logici ($x_A \implies x_{\text{req}}$), quote massime di selezione e inclusioni/esclusioni forzate.
+- **Tie-break canonico a 4 passi:** (1) Massimizzazione obiettivo primario $\implies$ (2) Minimizzazione investimento totale $\implies$ (3) Minimizzazione numero di cantieri $\implies$ (4) Ordinamento lessicografico stabile per ID.
+- Hash crittografico canonico dello scenario per garantire auditabilità assoluta e riproducibilità matematica.
+
+### 2. 🔍 Modulo Spiegazioni Deterministiche ("Reason Codes")
+Ogni singolo intervento candidato riceve una spiegazione verificabile e locale:
+- *Selezionato per contributo all'obiettivo*;
+- *Selezionato in quanto prerequisito*;
+- *Escluso per incompatibilità con intervento scelto*;
+- *Escluso per prerequisito mancante*;
+- *Escluso per superamento budget residuo o complessivo*;
+- *Escluso in quanto non ottimale (causa locale non deducibile)*.
+
+### 3. ⚖️ Confronto Scenari What-If (Slot A/B)
+- Salvataggio rapido in sessione di due configurazioni alternative.
+- Analisi automatica degli scostamenti $\Delta = B - A$ su kWh risparmiati, spesa annua ridotta, tonnellate di CO$_2$ e cantieri avviati.
+- Tabella differenziale degli interventi aggiunti e rimossi tra gli scenari.
+
+### 4. 📈 Sweep Deterministico di Sensibilità
+- Variazione sistematica del budget base su griglie da 3 a 51 campioni.
+- Classificazione dei candidati in:
+  - **Sempre selezionati** (*core investments* stabili e prioritari);
+  - **Mai selezionati** (*non convenienti* nel range esplorato);
+  - **Oscillanti** (*swing options*, dipendenti dalla specifica disponibilità di bilancio).
+
+### 5. 🤖 Assistente AI Confinato (Human-in-the-Loop)
+- Interpreta richieste in linguaggio naturale (es. *"Voglio massimizzare la riduzione di CO2 con 750.000 euro concentrandomi sulle scuole"*).
+- Propone una configurazione di scenario precompilata.
+- Fallback locale a regole in assenza di credenziali esterne (nessuna API key obbligatoria).
+- **Controllo Umano Obbligatorio:** nessuna proposta viene applicata automaticamente senza approvazione esplicita dell'operatore.
+
+---
+
+## 🛠️ Stack Tecnologico e Giustificazione Didattica
+
+L'architettura software è stata progettata privilegiando affidabilità e rigore matematico:
+
+| Componente | Scelta Tecnologica | Motivazione Tecnica di Trade-off |
+|:---|:---|:---|
+| **Ottimizzazione & Backend** | **Java 21 + Spring Boot 3 + Google OR-Tools CP-SAT** | OR-Tools offre binding industriali nativi e stabili per CP-SAT con vincoli logici avanzati (`OnlyEnforceIf`). Node.js non dispone di solutori MILP binari equivalenti maturi per l'ottimizzazione combinatoria esatta. |
+| **Database & Integrità** | **PostgreSQL 16 + Flyway Migrations** | Dominio fortemente relazionale caratterizzato da vincoli di chiave esterna e integrità referenziale (edifici $\leftrightarrow$ interventi $\leftrightarrow$ incompatibilità). Un database NoSQL come MongoDB esporrebbe a disallineamenti e stati orfani. |
+| **Frontend & UI** | **React 18 + TypeScript + Vite + Leaflet** | Strutture dati complesse (matrici di scostamento, coordinate territoriali, vettori di sensibilità). TypeScript garantisce tipizzazione statica a tempo di compilazione ed elimina errori di runtime. |
+| **Infrastruttura & Deploy** | **Docker Compose + Cloud Render (onrender.com)** | Containerizzazione completa per sviluppo locale multi-piattaforma (x86_64 e ARM64) e deployment immediato su Render con monitoraggio e porte dinamiche. |
+
+---
+
+## 🚀 Quickstart: Avvio in Locale
+
+### Avvio Rapido con Docker Compose (Raccomandato)
+
+Requisiti: **Docker Desktop** installato e avviato.
 
 ```bash
+# 1. Clona la repository principale
+git clone https://github.com/T-E-P-O/TEPO.git
+cd TEPO
+
+# 2. Avvia l'intero stack (DB PostgreSQL + Backend Spring Boot + Frontend React)
 docker compose up --build
 ```
 
-Atteso dopo ~30-40 s:
-- `tepo-db` → `healthy`
-- `tepo-backend` → `healthy` (attende Flyway + OR-Tools)
-- `tepo-frontend` → `healthy`
+Una volta terminato il build:
+- 🌐 **Frontend Web:** [http://localhost:5173](http://localhost:5173)
+- 🔌 **API REST Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- 🐘 **Database PostgreSQL:** `localhost:5432` (db: `tepo`, user: `tepo`, pass: `tepo`)
 
-Apri [http://localhost:5173](http://localhost:5173).
-
-**Funziona su**:
-- Windows x86_64
-- **Windows ARM64** (Snapdragon/Qualcomm) — caso in cui `mvn test` nativo
-  non può eseguire OR-Tools perché non esistono binari nativi per
-  `win32-aarch64`. Usa `.\scripts\test-backend.ps1` per i test.
-- Linux x86_64/ARM64
-- macOS Intel/Apple Silicon
-
-Per fermare: `docker compose down` (mantiene il DB). Per cancellare anche il DB: `docker compose down -v`.
-
-### Percorso sviluppo: nativo con hot-reload
-
-Richiede JDK 21, Maven 3.9, Node 24, e PostgreSQL (o solo il container `db`).
-
-**Linux / macOS / Windows x86_64**:
-
-```bash
-# 1. Database (solo il container)
-docker compose up -d db
-
-# 2. Backend
-cd backend
-export JAVA_HOME=/path/to/jdk-21
-export DB_URL=jdbc:postgresql://localhost:5432/tepo
-export DB_USERNAME=tepo
-export DB_PASSWORD=tepo
-mvn spring-boot:run -Dspring-boot.run.profiles=demo
-
-# 3. Frontend (in un nuovo terminale)
-cd frontend
-npm install
-npm run dev
-```
-
-Atteso: `Started TepoApplication` + `Local: http://localhost:5173/`.
-
-Il profilo `demo` carica automaticamente il dataset sintetico al primo avvio (100 edifici, 300 interventi). Ai riavvii successivi il dataset non viene duplicato.
-
-Swagger UI: `http://localhost:8080/swagger-ui.html`.
-
-### Assistente AI (opzionale)
-
-TEPO funziona **completamente senza LLM**. Il motore di default è deterministico e rule-based.
-
-Per attivare un provider LLM compatibile OpenAI:
+### Esecuzione della Suite di Test
 
 ```powershell
-$env:SPRING_PROFILES_ACTIVE = "demo,llm"
-$env:TEPO_AI_ENABLED        = "true"
-$env:LLM_API_KEY            = "<chiave>"
-$env:LLM_MODEL              = "gpt-4o-mini"
-mvn spring-boot:run
-```
-
-Se la chiave è assente, ogni chiamata cade nel fallback locale con warning espliciti. Nessuna chiave è mai committata. Vedi `docs/ai-integration.md`.
-
----
-
-## Test
-
-### Backend
-
-**Metodo universale (consigliato, funziona su qualsiasi OS con Docker)**:
-
-```powershell
+# Esecuzione 119 test backend (tramite container Docker isolato)
 .\scripts\test-backend.ps1
-```
 
-```bash
-./scripts/test-backend.sh
-```
-
-Esegue `mvn -B clean test` in `maven:3.9-eclipse-temurin-21`, lo **stesso ambiente della CI**.
-
-**Metodo diretto (Linux / macOS / Windows x86_64 con Java 21 + Maven)**:
-
-```bash
-cd backend
-mvn clean test
-```
-
-**Non funziona su Windows ARM64**: OR-Tools 9.11 non distribuisce binari nativi per `win32-aarch64`.
-
-Atteso: **119 test verdi**.
-
-| Classe | Test | Copertura |
-|---|---|---|
-| `BruteForceSolverTest` | 12 | Oracle esaustivo: vincoli, tie-break, casi limite |
-| `OrToolsSolverTest` | 6 | CP-SAT: budget, incompatibilità, prerequisiti, maxNumber, infeasible |
-| `OrToolsSolverRegressionTest` | 10 | Multi-pass, tie-break canonico, stati |
-| `SolverParityTest` | 4 | Parità OrTools vs BruteForce (istanze fisse) |
-| `SolverEdgeCaseTest` | 8 | Prerequisiti non-candidati, hash canonico, IncludeConstraint |
-| `SolverRandomizedParityTest` | 2 | 50 seed × 3 obiettivi = 150 confronti esaustivi |
-| `GreedyBaselineComparisonTest` | 3 | Solver vs baseline greedy |
-| `MultiObjectiveDiscriminativeTest` | 3 | Obiettivi matematicamente distinti |
-| `DemoMultiObjectiveEmpiricalTest` | 2 | Obiettivi distinti sul dataset demo |
-| `DemoDatasetCoherenceTest` | 7 | Coerenza dataset per vettore |
-| `ExplanationServiceTest` | 4 | Reason code base |
-| `ExplanationReasonCodeTest` | 8 | Reason code nuovi + regressione |
-| `SensitivityServiceTest` | 13 | Sweep, stabilità, validazione, determinismo |
-| `ImportControllerTest` | 10 | Validazione import, no scritture silenziose |
-| `LlmAiAssistantTest` | 10 | Provider LLM fake, fallback, validazione |
-| `RuleBasedAiAssistantTest` | 15 | Parser: 80k, anni, decimali, default |
-| `ScenarioControllerTest` | 2 | `@WebMvcTest` |
-
-### Frontend
-
-```bash
+# Esecuzione 69 test frontend (Vitest)
 cd frontend
 npm test
 ```
 
-Atteso: **69 test verdi** (14 file).
+---
 
-| File | Test | Copertura |
-|---|---|---|
-| `Dashboard.test.tsx` | 2 | Stato vuoto, principio architetturale (pinned) |
-| `ComparePage.test.tsx` | 2 | Stato vuoto, tabella A vs B (pinned) |
-| `AiAssistantPanel.test.tsx` | 8 | HITL, proposta, apply, reject, errore, fallback (pinned) |
-| `SensitivityPage.test.tsx` | 4 | Form, esecuzione, errore, disabilitazione (pinned) |
-| `scenarioStore.test.ts` | 3 | Store su `sessionStorage` |
-| `foundation.test.ts` | 5 | Formattazione, aggregazioni, matrice di sensibilità |
-| `shell.test.tsx` | 6 | Fascia, navigazione attiva, `Ctrl+K`, registro, sorting, grafici |
-| `DashboardRedesign.test.tsx` | 4 | Dossier ultimo risultato, catalogo, registro esecuzioni |
-| `BuildingsPage.test.tsx` | 5 | Filtri, ordinamento accessibile, conteggi, stati |
-| `InterventionsPage.test.tsx` | 5 | Filtri combinati, payback, provenienza, stato scenario |
-| `ImportPage.test.tsx` | 5 | Stepper, validazione, import, scarti, errori |
-| `ScenarioBuilder.test.tsx` | 9 | Parametri, vincoli visibili, ledger, dock, AI, payload |
-| `ResultPage.test.tsx` | 7 | Dossier, KPI, motivazioni, esploratore, salvataggi |
-| `MapPage.test.tsx` | 4 | Elenco, ricerca, legenda, stati (Leaflet mockato) |
+## 👥 Team di Sviluppo — Gruppo T14
 
-### Build frontend
+Progetto sviluppato congiuntamente da:
 
-```bash
-cd frontend
-npm run build
-```
-
-Atteso: `tsc` pulito, `vite build` senza errori.
+- **Mirco Negri** — [@mirconegri](https://github.com/mirconegri)
+- **Gabriele Duca** — [@ghebbb](https://github.com/ghebbb)
+- **Riccardo Scheda** — [@scheddiee](https://github.com/scheddiee)
 
 ---
 
-## Modello matematico
-
-Variabili binarie `x_i ∈ {0,1}` per ogni intervento candidato.
-
-**Obiettivo** (uno per scenario):
-- `max Σ energySaving_i · x_i` (risparmio energetico)
-- `max Σ economicSaving_i · x_i` (risparmio economico)
-- `max Σ co2Reduction_i · x_i` (riduzione CO2)
-
-Le tre funzioni sono matematicamente distinte sul dataset demo: le opzioni
-sono associate a due vettori energetici scorrelati (elettricità, gas).
-
-**Vincoli**:
-- `Σ cost_i · x_i ≤ B` (budget)
-- `x_A + x_B ≤ 1` (incompatibilità)
-- `x_A ⇒ x_req` (prerequisito; se il prerequisito non è candidato, `x_A = 0`)
-- `Σ x_i ≤ K` (massimo numero)
-- `x_i = 1` / `x_i = 0` (inclusione / esclusione; `IncludeConstraint` su opzione non candidata ⇒ INFEASIBLE)
-
-**Tie-break canonico** (lessicografico a 4 passi):
-1. massimizza obiettivo primario;
-2. minimizza costo totale;
-3. minimizza numero di interventi;
-4. preferisce ID crescenti.
-
-Il flag `canonicalTieBreakCompleted` è `true` solo se tutti i passi sono
-terminati. Il flag `optimalityProven` riflette lo stato del passo primario.
-Stati distinti: `OPTIMAL`, `FEASIBLE`, `INFEASIBLE`, `UNKNOWN`, `MODEL_INVALID`.
-
-Timeout per fase configurabili in `application.yaml` sotto `tepo.solver.*`.
-
-Dettagli in `docs/optimization.md`.
-
----
-
-## Analisi di sensibilità
-
-Sweep deterministico sul budget: `N` punti (3–51) tra `base × minFactor` e
-`base × maxFactor`, con lo stesso set di candidati e lo stesso solver.
-
-- Non è Monte Carlo: nessuna ipotesi probabilistica, nessun campionamento.
-- Non persiste: le run dell'analisi non finiscono in `optimization_runs`.
-- Non chiama LLM.
-- Classifica ogni opzione in `alwaysSelected` / `neverSelected` / `swing`.
-
-UI dedicata in `/sensitivity`. Endpoint: `POST /api/sensitivity/{id}/budget`.
-
----
-
-## Dataset demo
-
-100 edifici sintetici con coordinate plausibili a Trento, 6 tipologie di intervento, 300 opzioni.
-
-**Ipotesi sintetiche dichiarate:**
-
-- Due vettori energetici:
-  - Elettricità (LED, FV): **0.25 EUR/kWh**, **0.10 kg CO2/kWh** (ipotesi non calibrata, vedi `docs/audit-report.md`);
-  - Gas metano (involucro, impianti): **0.10 EUR/kWh**, **0.20 kg CO2/kWh**.
-- Scala: 1:1 per energia (kWh), CO2 (kg), importi (cent);
-- Payback demo: 5–25 anni per la maggior parte degli interventi.
-
-Tutti i dati sono marcati `SYNTHETIC` in dominio e visibili come "DEMO — dati sintetici" nell'interfaccia.
-
-**Nessun dato reale del Comune di Trento è incluso.** Il dataset è sintetico e viene fornito esclusivamente per scopi didattici.
-
-Vedi `docs/domain-model.md` e `docs/data-readiness.md` per i dettagli.
-
----
-
-## Endpoint API principali
-
-| Metodo | Path | Descrizione |
-|---|---|---|
-| GET | `/api/buildings` | Elenco edifici |
-| GET | `/api/buildings/{id}` | Dettaglio edificio |
-| POST | `/api/buildings` | Creazione edificio |
-| PUT | `/api/buildings/{id}` | Aggiornamento edificio |
-| DELETE | `/api/buildings/{id}` | Eliminazione edificio |
-| GET | `/api/interventions` | Elenco interventi (filtro `?buildingId=`) |
-| GET | `/api/interventions/{id}` | Dettaglio intervento |
-| GET | `/api/intervention-types` | Elenco tipologie |
-| POST | `/api/scenarios/{id}/optimize` | Esecuzione ottimizzazione |
-| POST | `/api/sensitivity/{id}/budget` | Sweep deterministico del budget |
-| POST | `/api/imports/buildings/validate` | Validazione CSV senza scrittura |
-| POST | `/api/imports/buildings/commit` | Import CSV validi |
-| GET | `/api/runs` | Storico esecuzioni |
-| GET | `/api/runs/scenario/{scenarioId}` | Storico per scenario |
-| GET | `/api/map/buildings` | Edifici per mappa |
-| POST | `/api/ai/propose` | Proposta AI (validata, mai applicata automaticamente) |
-| GET | `/api/ai/status` | Stato integrazione AI (LLM configurato o rule-based) |
-| GET | `/v3/api-docs` | OpenAPI JSON |
-| GET | `/swagger-ui.html` | Swagger UI |
-
-Dettagli in `docs/api.md` e nella Swagger UI a runtime.
-
----
-
-## Componente AI
-
-TEPO funziona **completamente senza LLM**. Il modulo `ai/` contiene:
-
-- `AiAssistant` — interfaccia astratta;
-- `RuleBasedAiAssistant` — implementazione default (`@Primary`), deterministica;
-- `LlmAiAssistant` — attivabile con profilo `llm` e API key esterna;
-- `LlmClient` / `OpenAiCompatibleClient` — client HTTP configurabile;
-- `LlmPromptTemplates` — prompt in italiano con schema JSON fisso;
-- `LlmResponseParser` — parsing robusto e validazione;
-- `AiController` — `POST /api/ai/propose` (proposta) e `GET /api/ai/status`.
-
-L'LLM non può modificare dati, vincoli o risultati del solver. Ogni proposta
-richiede approvazione umana esplicita. Vedi `docs/ai-integration.md` e
-`docs/requirements.md` (FR-18).
-
----
-
-## Import CSV
-
-L'import accetta file CSV con intestazione:
-
-```
-id,name,address,municipality,latitude,longitude,buildingType,surfaceM2
-```
-
-**Campi obbligatori per una riga valida:** `id`, `name`, `address`,
-`municipality`, `buildingType` non vuoti; `latitude`, `longitude` numerici;
-`surfaceM2` numerico > 0.
-
-**Caratteristiche gestite:** BOM UTF-8, fine riga LF/CRLF/CR, valori tra
-virgolette con virgole interne, separatori decimali `.` o `,`, righe vuote
-ignorate, ID duplicati rifiutati.
-
-**Nessun valore malformato viene convertito silenziosamente in zero.** Il
-commit restituisce `skippedDetails` con riga, ID e motivi.
-
-Esempio:
-
-```csv
-id,name,address,municipality,latitude,longitude,buildingType,surfaceM2
-BLD-101,Scuola nuova,Via Roma 5,Trento,46.0683,11.1206,Scuola,2200
-```
-
-Dettagli in `docs/api.md`.
-
----
-
-## Documentazione
-
-| Documento | Contenuto |
-|---|---|
-| `docs/requirements.md` | Requisiti funzionali e non funzionali |
-| `docs/architecture.md` | Architettura a layer |
-| `docs/domain-model.md` | Entità del dominio e invarianti |
-| `docs/optimization.md` | Modello matematico, tie-break, reason code, stati, sensibilità |
-| `docs/api.md` | Endpoint REST |
-| `docs/ai-integration.md` | Provider LLM, configurazione, human-in-the-loop, test |
-| `docs/testing.md` | Strategia di test |
-| `docs/traceability.md` | Matrice requisiti → componente → test |
-| `docs/demo.md` | Script per la presentazione |
-| `docs/collaudo.md` | Protocollo di collaudo |
-| `docs/data-readiness.md` | Fonti dati e stato di disponibilità |
-| `docs/audit-report.md` | Audit tecnico e correzioni |
-| `docs/checkpoint.md` | Verifica finale e stato di consegna |
-| `docs/design-system.md` | Design system "Strumento Civico", due registri, token, componenti, grafici, accessibilità |
-| `docs/uml/` | 4 diagrammi PlantUML |
-| `docs/screenshot/` | Screenshot storici e `docs/screenshot/v2/` con la revisione "Strumento Civico" |
-
----
-
-## Limiti dichiarati
-
-- Dataset sintetico, non validato dal Comune di Trento.
-- Nessuna integrazione con sistemi informativi comunali.
-- Singolo orizzonte decisionale (no multi-anno, no scheduling).
-- Obiettivo singolo per scenario (no multi-objective, no Pareto).
-- Nessuna previsione autonoma dei consumi o dei prezzi.
-- L'LLM è opzionale e non è attivo di default; il motore rule-based è deterministico.
-- Scenari A/B persistiti solo in `sessionStorage` (limite noto).
-- Analisi di sensibilità solo sul budget, deterministica, non probabilistica.
-
-Il progetto dimostra il metodo e il processo. L'utilità operativa reale richiede dati forniti dal Comune, validazione tecnica delle stime e revisione umana.
-
----
-
-## Licenza
-
-Progetto accademico — Università degli Studi di Trento. Tutti i diritti riservati ai membri del team.
-
-Il dataset è sintetico. Il progetto non è destinato all'uso in produzione senza validazione tecnica dei dati e del processo con il Comune di Trento.
+<div align="center">
+  <sub>Università degli Studi di Trento — Dipartimento di Ingegneria e Scienza dell'Informazione (DISI)</sub><br />
+  <sub>Corso di Ingegneria del Software (A.A. 2026/2027) — Progetto TEPO</sub>
+</div>
