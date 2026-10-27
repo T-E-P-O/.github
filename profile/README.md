@@ -2,8 +2,6 @@
 
   <img src="./img/logo_app.png" alt="TEPO Logo" width="460" style="margin-bottom: 24px;" />
 
-  # TEPO — Trento Energy Portfolio Optimizer
-
   **Decision Support System per la pianificazione e l'ottimizzazione degli interventi di efficientamento energetico sul patrimonio edilizio del Comune di Trento.**
 
   *Università degli Studi di Trento — Dipartimento di Ingegneria e Scienza dell'Informazione (DISI)*  
